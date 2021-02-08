@@ -1,0 +1,36 @@
+:root {
+  --emoji: #62a6ff;
+  --reactions: #ff6363;
+}
+
+.area {
+  fill-opacity: 0.8;
+}
+
+.area.emoji {
+  fill: var(--emoji);
+  stroke: var(--emoji);
+}
+
+.area.reactions {
+  fill: var(--reactions);
+  stroke: var(--reactions);
+}
+
+tick > line,
+.domain {
+  stroke: #ccc;
+  fill: none;
+}
+
+.tick > text {
+  fill: #888;
+}
+
+.emoji > span {
+  background: transparentize(var(--emoji), 0.2);
+}
+
+.reactions > span {
+  background: transparentize(var(--reactions), 0.2);
+}
