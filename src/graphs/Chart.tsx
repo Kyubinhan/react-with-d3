@@ -74,7 +74,8 @@ const Chart = (props: Props) => {
   );
 
   return (
-    <svg width={width} height={height}>
+    // Make it responsive: https://medium.com/@louisemoxy/a-simple-way-to-make-d3-js-charts-svgs-responsive-7afb04bc2e4b
+    <svg viewBox={`0 0 ${width} ${height}`}>
       <Axis
         width={width}
         height={height}
