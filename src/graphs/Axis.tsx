@@ -40,13 +40,15 @@ const getTransformValue = ({
 };
 
 const Axis = (props: Props) => {
+  console.log("Axis rendered");
+
   const axisRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (axisRef.current) {
       const axis = getOrientedAxis(props);
-      const element = d3.select(axisRef.current);
-      element
+      const selection = d3.select(axisRef.current);
+      selection
         .call(axis)
         .call((g) =>
           g
@@ -55,10 +57,10 @@ const Axis = (props: Props) => {
             .attr("stroke-dasharray", "2,2")
         );
       if (props.orient !== "bottom") {
-        element.call((g) => g.select(".domain").remove());
+        selection.call((g) => g.select(".domain").remove());
       }
     }
-  });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const transform = getTransformValue(props);
 

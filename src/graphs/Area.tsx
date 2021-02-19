@@ -13,6 +13,8 @@ interface Props {
 }
 
 const Area = (props: Props) => {
+  console.log("Area rendered");
+
   const { className, data, xScale, yScale, height, padding } = props;
   const area = d3
     .area<Datum>()
