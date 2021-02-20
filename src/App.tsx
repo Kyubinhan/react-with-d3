@@ -1,13 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
+import EmojiVsReactions from "./emoji-vs-reactions.json";
 import Chart from "./graphs/Chart";
+import { ChartContext, measurements } from "./graphs/ChartContext";
+import { calculateScales, Data, parseJson, Scales } from "./graphs/utils";
 
-const width = 800;
-const height = 400;
-const padding = 40;
-
-// TODO: Use React.context to pass down measurements
 function App() {
-  return <Chart width={width} height={height} padding={padding} />;
+  const [data, setData] = useState<Data | null>(null);
+  const [scales, setScales] = useState<Scales | null>(null);
+
+  // Simulate data fetch
+  useEffect(() => {
+    const data = parseJson(EmojiVsReactions);
+    setData(data);
+
+    const flattenData = Object.values(data).flat();
+    const scales = calculateScales(flattenData, measurements);
+    setScales(scales);
+  }, []);
+
+  return (
+    <ChartContext.Provider value={measurements}>
+      <Chart data={data} scales={scales} />
+    </ChartContext.Provider>
+  );
 }
 
 export default App;

@@ -1,26 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import * as d3 from "d3";
 
-import { Datum } from "./Chart";
+import { ChartContext } from "./ChartContext";
+import { Datum, Scales } from "./utils";
 
 interface Props {
   className: string;
   data: Datum[];
-  xScale: d3.ScaleTime<number, number>;
-  yScale: d3.ScaleLinear<number, number>;
-  height: number;
-  padding: number;
+  scales: Scales;
 }
 
-const Area = (props: Props) => {
+const Area = ({ className, data, scales }: Props) => {
   console.log("Area rendered");
 
-  const { className, data, xScale, yScale, height, padding } = props;
+  const { height, padding } = useContext(ChartContext)!;
+
   const area = d3
     .area<Datum>()
-    .x((d) => xScale(d.x))
+    .x((d) => scales.x(d.x))
     .y0(height - padding)
-    .y1((d) => yScale(d.y))
+    .y1((d) => scales.y(d.y))
     .curve(d3.curveCardinal.tension(1));
   const d = area(data);
 

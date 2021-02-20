@@ -1,15 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-interface Props {
-  width: number;
-  height: number;
-  padding: number;
-  orient: "left" | "right" | "bottom";
-  scale: d3.ScaleTime<number, number> | d3.ScaleLinear<number, number>;
-}
+import { ChartContext } from "./ChartContext";
 
-const getOrientedAxis = ({ width, padding, orient, scale }: Props) => {
+const getOrientedAxis = (
+  width: number,
+  padding: number,
+  orient: Props["orient"],
+  scale: Props["scale"]
+) => {
   const gridWidth = width - padding * 2;
   if (orient === "left") {
     return d3.axisLeft(scale).tickSizeInner(-gridWidth).tickSizeOuter(0);
@@ -24,12 +23,12 @@ const getOrientedAxis = ({ width, padding, orient, scale }: Props) => {
   }
 };
 
-const getTransformValue = ({
-  width,
-  height,
-  padding,
-  orient,
-}: Props): string => {
+const getTransformValue = (
+  width: number,
+  height: number,
+  padding: number,
+  orient: Props["orient"]
+): string => {
   if (orient === "left") {
     return `translate(${padding}, 0)`;
   } else if (orient === "bottom") {
@@ -39,14 +38,20 @@ const getTransformValue = ({
   }
 };
 
-const Axis = (props: Props) => {
+interface Props {
+  orient: "left" | "right" | "bottom";
+  scale: d3.ScaleTime<number, number> | d3.ScaleLinear<number, number>;
+}
+
+const Axis = ({ orient, scale }: Props) => {
   console.log("Axis rendered");
 
+  const { width, height, padding } = useContext(ChartContext)!;
   const axisRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (axisRef.current) {
-      const axis = getOrientedAxis(props);
+      const axis = getOrientedAxis(width, padding, orient, scale);
       const selection = d3.select(axisRef.current);
       selection
         .call(axis)
@@ -56,13 +61,13 @@ const Axis = (props: Props) => {
             .attr("stroke-opacity", 0.5)
             .attr("stroke-dasharray", "2,2")
         );
-      if (props.orient !== "bottom") {
+      if (orient !== "bottom") {
         selection.call((g) => g.select(".domain").remove());
       }
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const transform = getTransformValue(props);
+  const transform = getTransformValue(width, height, padding, orient);
 
   return <g className="axis" ref={axisRef} transform={transform} />;
 };
