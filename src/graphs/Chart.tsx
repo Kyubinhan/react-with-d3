@@ -1,8 +1,10 @@
-import React, { useRef, useContext } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
+import * as d3 from "d3";
 
 import "./Chart.css";
 import Axis from "./Axis";
 import Area from "./Area";
+import MouseLine from "./MouseLine";
 import { ChartContext } from "./ChartContext";
 import { Data, Scales } from "./utils";
 
@@ -16,6 +18,22 @@ const Chart = ({ data, scales }: Props) => {
   const { width, height } = useContext(ChartContext)!;
 
   const svgRef = useRef<SVGSVGElement>(null);
+  const [mousePos, setMousePos] = useState<[number, number] | null>(null);
+
+  useEffect(() => {
+    const svgElement = svgRef.current;
+
+    if (svgElement) {
+      const selection = d3.select(svgElement);
+      selection.on("touchmove mousemove", (e) => {
+        setMousePos(d3.pointer(e));
+      });
+    }
+
+    return () => {
+      d3.select(svgElement).on("touchmove mousemove", null);
+    };
+  }, []);
 
   return (
     // Make it responsive: https://medium.com/@louisemoxy/a-simple-way-to-make-d3-js-charts-svgs-responsive-7afb04bc2e4b
@@ -24,6 +42,7 @@ const Chart = ({ data, scales }: Props) => {
       <Axis scale={scales.x} orient="bottom" />
       <Area className="emoji" data={data.emoji} scales={scales} />
       <Area className="reactions" data={data.reactions} scales={scales} />
+      <MouseLine mousePos={mousePos} />
     </svg>
   );
 };

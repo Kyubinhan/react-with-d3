@@ -1,4 +1,4 @@
-:root {
+.chart {
   --emoji: #62a6ff;
   --reactions: #ff6363;
 }
@@ -33,4 +33,9 @@ tick > line,
 
 .reactions > span {
   background: transparentize(var(--reactions), 0.2);
+}
+
+.mouse-line {
+  stroke: gray;
+  stroke-dasharray: 1, 1;
 }
