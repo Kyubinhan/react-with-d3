@@ -7,8 +7,8 @@ import { ChartContext } from "./ChartContext";
 import { Data, Scales } from "./utils";
 
 interface Props {
-  data: Data | null;
-  scales: Scales | null;
+  data: Data;
+  scales: Scales;
 }
 
 const Chart = ({ data, scales }: Props) => {
@@ -17,13 +17,9 @@ const Chart = ({ data, scales }: Props) => {
 
   const svgRef = useRef<SVGSVGElement>(null);
 
-  if (!data || !scales) {
-    return null;
-  }
-
   return (
     // Make it responsive: https://medium.com/@louisemoxy/a-simple-way-to-make-d3-js-charts-svgs-responsive-7afb04bc2e4b
-    <svg ref={svgRef} viewBox={`0 0 ${width} ${height}`}>
+    <svg className="chart" ref={svgRef} viewBox={`0 0 ${width} ${height}`}>
       <Axis scale={scales.y} orient="left" />
       <Axis scale={scales.x} orient="bottom" />
       <Area className="emoji" data={data.emoji} scales={scales} />

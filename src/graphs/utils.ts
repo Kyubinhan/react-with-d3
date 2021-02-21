@@ -26,28 +26,30 @@ export const parseJson = (json: EmojiVsReaction[]) => {
   return data;
 };
 
+export type Data = ReturnType<typeof parseJson>;
+
 export const calculateScales = (
-  data: Datum[],
+  data: Data,
   measurements: { width: number; height: number; padding: number }
 ) => {
+  const flattenData = Object.values(data).flat();
   const { width, height, padding } = measurements;
   const x = d3
     .scaleTime()
     .domain([
-      d3.min(data, (d) => d.x) as Date,
-      d3.max(data, (d) => d.x) as Date,
+      d3.min(flattenData, (d) => d.x) as Date,
+      d3.max(flattenData, (d) => d.x) as Date,
     ])
     .range([padding, width - padding]);
   const y = d3
     .scaleLinear()
     .domain([
-      d3.min(data, (d) => d.y) as number,
-      d3.max(data, (d) => d.y) as number,
+      d3.min(flattenData, (d) => d.y) as number,
+      d3.max(flattenData, (d) => d.y) as number,
     ])
     .range([height - padding, padding]);
 
   return { x, y };
 };
 
-export type Data = ReturnType<typeof parseJson>;
 export type Scales = ReturnType<typeof calculateScales>;
