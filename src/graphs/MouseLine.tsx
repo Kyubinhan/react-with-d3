@@ -39,4 +39,5 @@ const MouseLine = ({ mousePos }: Props) => {
   return null;
 };
 
-export default React.memo(MouseLine);
+export default MouseLine;
+// export default React.memo(MouseLine);
