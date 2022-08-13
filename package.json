@@ -2,6 +2,7 @@
   "name": "d3-demo",
   "version": "0.1.0",
   "private": true,
+  "description": "This example shows how D3.js is being used for vector related calculations to display svg graphics in a React project.",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
