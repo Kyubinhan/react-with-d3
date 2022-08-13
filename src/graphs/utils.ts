@@ -4,10 +4,15 @@ export type Datum = { x: Date; y: number };
 
 type EmojiVsReaction = { date: string; emoji: number; reactions: number };
 
+/**
+ * Parse json data and sort it in ascending order
+ *
+ * @returns An object containing an array of emojis and an array of reactions
+ */
 export const parseJson = (json: EmojiVsReaction[]) => {
   const parsed = json.map((j) => ({ ...j, date: new Date(j.date) }));
-  const sorted = parsed.sort((a, b) => {
-    return b.date.valueOf() - a.date.valueOf();
+  const sortedInAsc = parsed.sort((a, b) => {
+    return a.date.valueOf() - b.date.valueOf();
   });
   const data: {
     emoji: Datum[];
@@ -17,7 +22,7 @@ export const parseJson = (json: EmojiVsReaction[]) => {
     reactions: [],
   };
 
-  sorted.forEach((entry) => {
+  sortedInAsc.forEach((entry) => {
     const date = new Date(entry.date);
     data.emoji.push({ x: date, y: entry.emoji });
     data.reactions.push({ x: date, y: entry.reactions });
@@ -28,6 +33,11 @@ export const parseJson = (json: EmojiVsReaction[]) => {
 
 export type Data = ReturnType<typeof parseJson>;
 
+/**
+ * Calculate suitable x & y scales based on the given data range and chart measurements
+ *
+ * @returns An object containing x & y scales which will be used in chart
+ */
 export const calculateScales = (
   data: Data,
   measurements: { width: number; height: number; padding: number }
