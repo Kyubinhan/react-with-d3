@@ -72,4 +72,5 @@ const Axis = ({ orient, scale }: Props) => {
   return <g className="axis" ref={axisRef} transform={transform} />;
 };
 
-export default React.memo(Axis);
+export default Axis;
+// export default React.memo(Axis);

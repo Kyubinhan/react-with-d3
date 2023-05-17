@@ -30,4 +30,5 @@ const Area = ({ className, data, scales }: Props) => {
   return <path className={`area ${className}`} d={d} />;
 };
 
-export default React.memo(Area);
+export default Area;
+// export default React.memo(Area);
